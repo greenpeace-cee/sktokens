@@ -7,22 +7,20 @@ return [
     'ang/crmSktokens.js',
     'ang/crmSktokens/*.js',
     'ang/crmSktokens/*/*.js',
+    'ang/crmSearchAdmin/*/*.js',
   ],
   'partials' => [
-    'ang/crmSktokens',
+    'ang/crmSearchAdmin',
   ],
   'requires' => [
     'crmSearchDisplay',
     'crmUi',
     'ui.bootstrap',
-    // 'crmUtil',
-    // 'ngRoute',
+    'crmSearchAdmin',
   ],
   'basePages' => ['civicrm/search', 'civicrm/admin/search'],
   'bundles' => ['bootstrap3'],
   'exports' => [
     'crm-search-display-tokens' => 'E',
   ],
-
-  'settings' => [],
 ];
