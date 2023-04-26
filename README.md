@@ -47,19 +47,13 @@ cv en sktokens
 
 ## Getting Started
 
-DO NOT USE THIS IN PRODUCTION YET! This is a work-in-progress.  Right now it's a proof-of-concept.
-
 * Create a SearchKit using the entity you'd like the tokens to use (usually this will be Contacts).
 * Add any columns you'd like to the SearchKit.
 * Create a new display of type "Tokens" and save.
 
 Now, when creating a new email/letter, the tokens should appear in your token browser under a category matching your display name.
 
-## Known Issues
+## Possible future features
 
-Just about everything.
-* Can't edit the display name.
-* Can't rename the tokens.
-* Can't use column names that have a space in them.
-
-Once we create a UI these problems will be resolved.
+* Add rewrite option similar to table/list displays.
+* Add option for HTML output.
