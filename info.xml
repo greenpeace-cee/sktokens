@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<extension key="sktokens" type="module">
+  <file>sktokens</file>
+  <name>SearchKit Tokens</name>
+  <description>Build your own tokens from SearchKit searches.</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Jon Goldberg</author>
+    <email>jon@megaphonetech.com</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">http://FIXME</url>
+    <url desc="Documentation">http://FIXME</url>
+    <url desc="Support">http://FIXME</url>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2023-04-26</releaseDate>
+  <version>1.0</version>
+  <develStage>alpha</develStage>
+  <compatibility>
+    <ver>5.60</ver>
+  </compatibility>
+  <comments></comments>
+  <classloader>
+    <psr0 prefix="CRM_" path="."/>
+    <psr4 prefix="Civi\" path="Civi"/>
+  </classloader>
+  <civix>
+    <namespace>CRM/Sktokens</namespace>
+    <format>23.02.1</format>
+    <angularModule>crmSktokens</angularModule>
+  </civix>
+  <mixins>
+    <mixin>mgd-php@1.0.0</mixin>
+    <mixin>setting-php@1.0.0</mixin>
+    <mixin>smarty-v2@1.0.1</mixin>
+  </mixins>
+</extension>
