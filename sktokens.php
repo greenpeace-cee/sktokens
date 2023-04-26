@@ -14,14 +14,13 @@ function sktokens_civicrm_container(ContainerBuilder $container) {
 function sktokens_register_tokens(\Civi\Token\Event\TokenRegisterEvent $e) {
   // TODO: I don't think any permissions apply to *viewing* search displays.
   $searchDisplays = (array) \Civi\Api4\SearchDisplay::get()
-    ->addSelect('*', 'saved_search_id.name', 'saved_search_id.api_params')
+    ->addSelect('name', 'label', 'settings', 'saved_search_id.name')
     ->addWhere('type', '=', 'tokens')
     ->execute();
   foreach ($searchDisplays as $searchDisplay) {
-    // TODO: We really want to define token names in the display, not just the SK "Select" fields.
-    $fields = $searchDisplay['saved_search_id.api_params']['select'];
+    $fields = $searchDisplay['settings']['columns'];
     foreach ($fields as $field) {
-      $e->entity($searchDisplay['name'])->register($field, "{$searchDisplay['label']} $field");
+      $e->entity($searchDisplay['name'])->register($field['key'], $field['label']);
     }
   }
 }
