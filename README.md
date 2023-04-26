@@ -2,14 +2,14 @@
 
 ![Screenshot](/images/screenshot.png)
 
-(*FIXME: In one or two paragraphs, describe what the extension does and why one would download it. *)
+Build your own tokens with SearchKit.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
 ## Requirements
 
 * PHP v7.4+
-* CiviCRM (*FIXME: Version number*)
+* CiviCRM 5.60+
 
 ## Installation (Web UI)
 
@@ -47,8 +47,19 @@ cv en sktokens
 
 ## Getting Started
 
-(* FIXME: Where would a new user navigate to get started? What changes would they see? *)
+DO NOT USE THIS IN PRODUCTION YET! This is a work-in-progress.  Right now it's a proof-of-concept.
+
+* Create a SearchKit using the entity you'd like the tokens to use (usually this will be Contacts).
+* Add any columns you'd like to the SearchKit.
+* Create a new display of type "Tokens" and save.
+
+Now, when creating a new email/letter, the tokens should appear in your token browser under a category matching your display name.
 
 ## Known Issues
 
-(* FIXME *)
+Just about everything.
+* Can't edit the display name.
+* Can't rename the tokens.
+* Can't use column names that have a space in them.
+
+Once we create a UI these problems will be resolved.
