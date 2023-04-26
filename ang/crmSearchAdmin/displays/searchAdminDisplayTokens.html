@@ -1,0 +1,14 @@
+<div ng-include="'~/crmSearchAdmin/crmSearchAdminDisplayHeader.html'"></div>
+<fieldset class="crm-search-admin-edit-columns-wrapper">
+  <div class="crm-search-admin-edit-columns" ng-model="$ctrl.display.settings.columns" ui-sortable="$ctrl.parent.sortableOptions">
+    <fieldset ng-repeat="col in $ctrl.display.settings.columns" class="crm-draggable">
+      <legend><i class="crm-i fa-arrows crm-search-move-icon"></i> {{ $ctrl.parent.getColLabel(col) }}</legend>
+      <div class="form-inline crm-search-admin-flex-row">
+        <label>
+          {{:: ts('Token Label') }}
+        </label>
+        <input class="form-control crm-flex-1" type="text" ng-model="col.label" ng-model-options="{updateOn: 'blur'}">
+      </div>
+    </fieldset>
+  </div>
+</fieldset>
