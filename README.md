@@ -53,6 +53,11 @@ cv en sktokens
 
 Now, when creating a new email/letter, the tokens should appear in your token browser under a category matching your display name.
 
+## Known Issues
+
+* The UI doesn't register with Civi.  It only works if you copy the files in `ang` to the same location in the SearchKit extension.
+
+
 ## Possible future features
 
 * Add rewrite option similar to table/list displays.
