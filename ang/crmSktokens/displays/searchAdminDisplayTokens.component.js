@@ -16,10 +16,6 @@
         ctrl = this;
       $scope.hs = crmUiHelp({file: 'CRM/Search/Help/Display'});
 
-      this.getColTypes = function() {
-        return ctrl.parent.colTypes;
-      };
-
       this.$onInit = function () {
         if (!ctrl.display.settings) {
           ctrl.display.settings = {
