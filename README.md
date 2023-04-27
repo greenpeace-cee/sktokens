@@ -1,7 +1,4 @@
-# sktokens
-
-![Screenshot](/images/screenshot.png)
-
+# SearchKit Tokens
 Build your own tokens with SearchKit.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
@@ -47,16 +44,22 @@ cv en sktokens
 
 ## Getting Started
 
-* Create a SearchKit using the entity you'd like the tokens to use (usually this will be Contacts).
-* Add any columns you'd like to the SearchKit.
-* Create a new display of type "Tokens" and save.
+* Create a SearchKit (**Search menu » SearchKit**). The entity should match the search type you intend to use - e.g. "Contacts" for *Advanced Search*, "Contribution" for *Find Contributions*, etc.
+* Add any columns you'd like to use as tokens. Feel free to use field transformations, grouping, etc.
+* Create a new display of type "Tokens" (see screenshot 1).
+* Place a label you'd like to see in your token browser under each field you'd like to use as a token (see screenshot 2).
+* When performing an action that uses tokens - emails, letters, receipts and more - select the token from the browser.
 
-Now, when creating a new email/letter, the tokens should appear in your token browser under a category matching your display name.
+Now, when creating a new email/letter, the tokens should appear in your token browser under a category matching your display name (see screenshot 3).
 
-## Known Issues
+**Screenshot 1**
+![Screenshot](/images/Selection_1859.png)
 
-* The UI doesn't register with Civi.  It only works if you copy the files in `ang` to the same location in the SearchKit extension.
+**Screenshot 2**
+![Screenshot](/images/Selection_1860.png)
 
+**Screenshot 3**
+![Screenshot](/images/Selection_1861.png)
 
 ## Possible future features
 
