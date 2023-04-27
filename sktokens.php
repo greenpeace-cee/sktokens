@@ -12,7 +12,6 @@ function sktokens_civicrm_container(ContainerBuilder $container) {
 }
 
 function sktokens_register_tokens(\Civi\Token\Event\TokenRegisterEvent $e) {
-  // TODO: I don't think any permissions apply to *viewing* search displays.
   $searchDisplays = (array) \Civi\Api4\SearchDisplay::get()
     ->addSelect('name', 'label', 'settings', 'saved_search_id.name')
     ->addWhere('type', '=', 'tokens')
@@ -20,7 +19,9 @@ function sktokens_register_tokens(\Civi\Token\Event\TokenRegisterEvent $e) {
   foreach ($searchDisplays as $searchDisplay) {
     $fields = $searchDisplay['settings']['columns'];
     foreach ($fields as $field) {
-      $e->entity($searchDisplay['name'])->register($field['key'], $field['label']);
+      if ($field['label']) {
+        $e->entity($searchDisplay['name'], $searchDisplay['label'])->register($field['key'], $field['label']);
+      }
     }
   }
 }
@@ -46,7 +47,7 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
           ->first();
         if ($searchResult['data'] ?? FALSE) {
           foreach ($searchResult['data'] as $field => $value) {
-            $row->tokens($searchDisplay["name"], $field, $value);
+            $row->tokens($searchDisplay['name'], $field, $value);
           }
         }
       }
