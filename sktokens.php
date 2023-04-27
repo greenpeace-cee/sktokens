@@ -18,9 +18,10 @@ function sktokens_register_tokens(\Civi\Token\Event\TokenRegisterEvent $e) {
     ->execute();
   foreach ($searchDisplays as $searchDisplay) {
     $fields = $searchDisplay['settings']['columns'];
+    $category = CRM_Utils_String::titleToVar($searchDisplay['label']);
     foreach ($fields as $field) {
       if ($field['label']) {
-        $e->entity($searchDisplay['name'], $searchDisplay['label'])->register($field['key'], $field['label']);
+        $e->entity($category)->register($field['key'], $field['label']);
       }
     }
   }
@@ -30,12 +31,13 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
   // Get the list of token SearchDisplays.
   $tokens = $e->getTokenProcessor()->getMessageTokens();
   $searchDisplays = (array) \Civi\Api4\SearchDisplay::get()
-    ->addSelect('name', 'saved_search_id.name', 'saved_search_id.api_entity')
+    ->addSelect('label', 'saved_search_id.name', 'saved_search_id.api_entity')
     ->addWhere('type', '=', 'tokens')
     ->execute();
   foreach ($searchDisplays as $searchDisplay) {
+    $category = CRM_Utils_String::titleToVar($searchDisplay['label']);
     // Check if any tokens from each SearchDisplay are used.
-    if ($tokens[$searchDisplay['name']] ?? FALSE) {
+    if ($tokens[$category] ?? FALSE) {
       $primaryKeyType = strtolower($searchDisplay['saved_search_id.api_entity']) . 'Id';
       // TODO: Can we do fewer API calls by getting all the IDs at once?
       foreach ($e->getRows() as $row) {
@@ -47,7 +49,7 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
           ->first();
         if ($searchResult['data'] ?? FALSE) {
           foreach ($searchResult['data'] as $field => $value) {
-            $row->tokens($searchDisplay['name'], $field, $value);
+            $row->tokens($category, $field, $value);
           }
         }
       }
