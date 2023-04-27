@@ -48,8 +48,10 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
           ->execute()
           ->first();
         if ($searchResult['data'] ?? FALSE) {
-          foreach ($searchResult['data'] as $field => $value) {
-            $row->tokens($category, $field, $value);
+          foreach ($tokens[$category] as $token) {
+            if ($searchResult['data'][$token]) {
+              $row->tokens($category, $token, $searchResult['data'][$token]);
+            }
           }
         }
       }
