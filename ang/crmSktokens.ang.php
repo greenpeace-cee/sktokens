@@ -7,10 +7,9 @@ return [
     'ang/crmSktokens.js',
     'ang/crmSktokens/*.js',
     'ang/crmSktokens/*/*.js',
-    'ang/crmSearchAdmin/*/*.js',
   ],
   'partials' => [
-    'ang/crmSearchAdmin',
+    'ang/crmSktokens',
   ],
   'requires' => [
     'crmSearchDisplay',

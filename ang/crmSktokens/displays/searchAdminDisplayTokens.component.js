@@ -10,7 +10,7 @@
     require: {
       parent: '^crmSearchAdminDisplay'
     },
-    templateUrl: '~/crmSearchAdmin/displays/searchAdminDisplayTokens.html',
+    templateUrl: '~/crmSktokens/displays/searchAdminDisplayTokens.html',
     controller: function($scope, searchMeta, crmUiHelp) {
       var ts = $scope.ts = CRM.ts('org.civicrm.search_kit'),
         ctrl = this;
