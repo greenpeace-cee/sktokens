@@ -30,7 +30,7 @@ function sktokens_register_tokens(\Civi\Token\Event\TokenRegisterEvent $e) {
 function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
   // Get the list of token SearchDisplays.
   $tokens = $e->getTokenProcessor()->getMessageTokens();
-  $searchDisplays = (array) \Civi\Api4\SearchDisplay::get()
+  $searchDisplays = (array) \Civi\Api4\SearchDisplay::get(FALSE)
     ->addSelect('label', 'saved_search_id.name', 'saved_search_id.api_entity')
     ->addWhere('type', '=', 'tokens')
     ->execute();
@@ -42,7 +42,7 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
       // TODO: Can we do fewer API calls by getting all the IDs at once?
       foreach ($e->getRows() as $row) {
         $primaryKey = $e->getTokenProcessor()->getContextValues($primaryKeyType)[0];
-        $searchResult = \Civi\Api4\SearchDisplay::run()
+        $searchResult = \Civi\Api4\SearchDisplay::run(FALSE)
           ->setSavedSearch($searchDisplay['saved_search_id.name'])
           ->setFilters(['id' => $primaryKey])
           ->execute()
