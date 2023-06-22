@@ -28,6 +28,12 @@
         ctrl.parent.initColumns({});
       };
 
+      this.$onRewrite = function(col) {
+        if (col.rewrite) {
+          ctrl.parent.toggleRewrite(col);
+        }
+      };
+
     }
   });
 
