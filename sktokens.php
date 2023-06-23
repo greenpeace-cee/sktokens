@@ -13,14 +13,14 @@ function sktokens_civicrm_container(ContainerBuilder $container) {
 
 function sktokens_register_tokens(\Civi\Token\Event\TokenRegisterEvent $e) {
   $searchDisplays = (array) \Civi\Api4\SearchDisplay::get()
-    ->addSelect('name', 'label', 'settings', 'saved_search_id.name')
+    ->addSelect('label', 'settings', 'saved_search_id.name')
     ->addWhere('type', '=', 'tokens')
     ->execute();
   foreach ($searchDisplays as $searchDisplay) {
     $fields = $searchDisplay['settings']['columns'];
-    $category = CRM_Utils_String::titleToVar($searchDisplay['label']);
+    $category = \CRM_Utils_String::titleToVar($searchDisplay['label']);
     foreach ($fields as $field) {
-      if ($field['label']) {
+      if ($field['label'] ?? FALSE) {
         $e->entity($category)->register($field['key'], $field['label']);
       }
     }
@@ -31,11 +31,12 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
   // Get the list of token SearchDisplays.
   $tokens = $e->getTokenProcessor()->getMessageTokens();
   $searchDisplays = (array) \Civi\Api4\SearchDisplay::get(FALSE)
-    ->addSelect('label', 'saved_search_id.name', 'saved_search_id.api_entity')
+    ->addSelect('name', 'label', 'saved_search_id.name', 'saved_search_id.api_entity', 'settings')
     ->addWhere('type', '=', 'tokens')
     ->execute();
   foreach ($searchDisplays as $searchDisplay) {
-    $category = CRM_Utils_String::titleToVar($searchDisplay['label']);
+    $rewriteMap = \Civi\Sktokens\Utils::getRewriteMap($searchDisplay['name'], $searchDisplay['settings']['columns']);
+    $category = \CRM_Utils_String::titleToVar($searchDisplay['label']);
     // Check if any tokens from each SearchDisplay are used.
     if ($tokens[$category] ?? FALSE) {
       $primaryKeyType = strtolower($searchDisplay['saved_search_id.api_entity']) . 'Id';
@@ -45,13 +46,18 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
         $searchResult = \Civi\Api4\SearchDisplay::run(FALSE)
           ->setSavedSearch($searchDisplay['saved_search_id.name'])
           ->setFilters(['id' => $primaryKey])
+          ->setDisplay($searchDisplay['name'])
           ->execute()
           ->first();
         if ($searchResult['data'] ?? FALSE) {
           foreach ($tokens[$category] as $token) {
-            if ($searchResult['data'][$token]) {
-              $row->tokens($category, $token, $searchResult['data'][$token]);
+            $renderedValue = $searchResult['data'][$token];
+            // Only rewritten tokens will have a rewrite label.
+            $rewriteLabel = $rewriteMap[$token] ?? FALSE;
+            if ($rewriteLabel) {
+              $renderedValue = \Civi\Sktokens\Utils::getRewrittenToken($rewriteLabel, $searchResult);
             }
+            $row->tokens($category, $token, $renderedValue);
           }
         }
       }
