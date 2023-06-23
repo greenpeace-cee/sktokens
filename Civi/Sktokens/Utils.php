@@ -20,14 +20,14 @@ class Utils {
   /**
    * This gets the rewritten value for a single result.
    */
-  public static function getRewrittenToken(string $rewriteLabel, array $searchResult) : ?string {
+  public static function getRewrittenToken(string $rewriteLabel, array $columns) : ?string {
     // This maps token labels to the rendered value.
-    foreach ($searchResult['columns'] as $column) {
-      if ($column['label']) {
-        $lookupArray[$column['label']] = $column['val'];
+    foreach ($columns as $column) {
+      if (isset($column['label']) && $column['label'] === $rewriteLabel) {
+        return $column['val'];
       }
     }
-    return $lookupArray[$rewriteLabel] ?? NULL;
+    return NULL;
   }
 
 }
