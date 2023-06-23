@@ -14,13 +14,13 @@ class Utils {
         }
       }
     }
-    return self::$rewriteMap[$name];
+    return self::$rewriteMap[$name] ?? [];
   }
 
   /**
    * This gets the rewritten value for a single result.
    */
-  public static function getRewrittenToken($rewriteLabel, $searchResult) {
+  public static function getRewrittenToken(string $rewriteLabel, array $searchResult) : ?string {
     // This maps token labels to the rendered value.
     foreach ($searchResult['columns'] as $column) {
       if ($column['label']) {
