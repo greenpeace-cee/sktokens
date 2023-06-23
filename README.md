@@ -48,6 +48,7 @@ cv en sktokens
 * Add any columns you'd like to use as tokens. Feel free to use field transformations, grouping, etc.
 * Create a new display of type "Tokens" (see screenshot 1).
 * Place a label you'd like to see in your token browser under each field you'd like to use as a token (see screenshot 2).
+* Optionally, tick the "Rewrite Text" checkbox. This works identically to other search displays' rewrite option.
 * When performing an action that uses tokens - emails, letters, receipts and more - select the token from the browser.
 
 Now, when creating a new email/letter, the tokens should appear in your token browser under a category matching your display name (see screenshot 3).
@@ -60,8 +61,3 @@ Now, when creating a new email/letter, the tokens should appear in your token br
 
 **Screenshot 3**
 ![Screenshot](/images/Selection_1861.png)
-
-## Possible future features
-
-* Add rewrite option similar to table/list displays.
-* Add option for HTML output.
