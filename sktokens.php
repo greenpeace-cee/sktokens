@@ -40,23 +40,33 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
     // Check if any tokens from each SearchDisplay are used.
     if ($tokens[$category] ?? FALSE) {
       $primaryKeyType = strtolower($searchDisplay['saved_search_id.api_entity']) . 'Id';
-      // TODO: Can we do fewer API calls by getting all the IDs at once?
-      foreach ($e->getRows() as $row) {
-        $primaryKey = $e->getTokenProcessor()->getContextValues($primaryKeyType)[0];
-        $searchResult = \Civi\Api4\SearchDisplay::run(FALSE)
-          ->setSavedSearch($searchDisplay['saved_search_id.name'])
-          ->setFilters(['id' => $primaryKey])
-          ->setDisplay($searchDisplay['name'])
-          ->execute()
-          ->first();
-        if ($searchResult['data'] ?? FALSE) {
-          foreach ($tokens[$category] as $token) {
-            $renderedValue = $searchResult['data'][$token];
-            // Only rewritten tokens will have a rewrite label.
-            $rewriteLabel = $rewriteMap[$token] ?? FALSE;
-            if ($rewriteLabel) {
-              $renderedValue = \Civi\Sktokens\Utils::getRewrittenToken($rewriteLabel, $searchResult);
-            }
+      // Get all the row IDs so we can do one query.
+      $primaryKeys = [];
+      foreach ($e->getRows() as $key => $row) {
+        $primaryKeys[] = $e->getTokenProcessor()->getContextValues($primaryKeyType)[$key];
+      }
+      $searchResult = \Civi\Api4\SearchDisplay::run(FALSE)
+        ->setSavedSearch($searchDisplay['saved_search_id.name'])
+        ->setFilters(['id' => $primaryKeys])
+        ->setDisplay($searchDisplay['name'])
+        ->execute();
+      if (!count($searchResult)) {
+        return;
+      }
+      $dataArrayUnindexed = array_column((array) $searchResult, 'data');
+      $dataArray = array_combine(array_column($dataArrayUnindexed, 'id'), $dataArrayUnindexed);
+      $rewriteArrayUnindexed = array_column((array) $searchResult, 'columns');
+      $rewriteArray = array_combine(array_column($dataArrayUnindexed, 'id'), $rewriteArrayUnindexed);
+      foreach ($e->getRows() as $key => $row) {
+        $rowPrimaryKey = $e->getTokenProcessor()->getContextValues($primaryKeyType)[$key];
+        foreach ($tokens[$category] as $token) {
+          $renderedValue = $dataArray[$rowPrimaryKey][$token];
+          // Only rewritten tokens will have a rewrite label.
+          $rewriteLabel = $rewriteMap[$token] ?? FALSE;
+          if ($rewriteLabel) {
+            $renderedValue = \Civi\Sktokens\Utils::getRewrittenToken($rewriteLabel, $rewriteArray[$rowPrimaryKey]);
+          }
+          if ($renderedValue) {
             $row->tokens($category, $token, $renderedValue);
           }
         }
