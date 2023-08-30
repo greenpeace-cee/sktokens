@@ -67,6 +67,7 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
             $renderedValue = \Civi\Sktokens\Utils::getRewrittenToken($rewriteLabel, $rewriteArray[$rowPrimaryKey]);
           }
           if ($renderedValue) {
+            $row->format('text/html');
             $row->tokens($category, $token, $renderedValue);
           }
         }
