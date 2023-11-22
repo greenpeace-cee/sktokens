@@ -63,7 +63,7 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
           $renderedValue = $dataArray[$rowPrimaryKey][$token];
           // Only rewritten tokens will have a rewrite label.
           $rewriteLabel = $rewriteMap[$token] ?? FALSE;
-          if ($rewriteLabel) {
+          if ($rewriteLabel && $rewriteArray) {
             $renderedValue = \Civi\Sktokens\Utils::getRewrittenToken($rewriteLabel, $rewriteArray[$rowPrimaryKey]);
           }
           if ($renderedValue) {
