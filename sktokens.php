@@ -45,6 +45,12 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
       foreach ($e->getRows() as $key => $row) {
         $primaryKeys[] = $e->getTokenProcessor()->getContextValues($primaryKeyType)[$key];
       }
+      // Check to see if any of the elements in $primaryKeys has a value.
+      $primaryKeyExists = array_filter($primaryKeys);
+      // Return if no $primaryKeys have a value.
+      if (!$primaryKeyExists) {
+        return;
+      }      
       $searchResult = \Civi\Api4\SearchDisplay::run(FALSE)
         ->setSavedSearch($searchDisplay['saved_search_id.name'])
         ->setFilters(['id' => $primaryKeys])
