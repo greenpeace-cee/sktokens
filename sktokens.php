@@ -50,7 +50,7 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
       // Return if no $primaryKeys have a value.
       if (!$primaryKeyExists) {
         return;
-      }      
+      }
       $searchResult = \Civi\Api4\SearchDisplay::run(FALSE)
         ->setSavedSearch($searchDisplay['saved_search_id.name'])
         ->setFilters(['id' => $primaryKeys])
@@ -78,6 +78,17 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
           }
         }
       }
+    }
+  }
+}
+
+/**
+ * Filters don't work when there's no primary key in the display.
+ */
+function sktokens_civicrm_pre($op, $objectName, $objectId, &$objectRef) {
+  if ($objectName === 'SavedSearch' && in_array($op, ['create', 'edit'])) {
+    if (!in_array('id', $objectRef["api_params"]["select"])) {
+      $objectRef["api_params"]["select"][] = 'id';
     }
   }
 }
