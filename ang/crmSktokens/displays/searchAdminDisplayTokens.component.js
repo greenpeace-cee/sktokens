@@ -19,10 +19,6 @@
       this.$onInit = function () {
         if (!ctrl.display.settings) {
           ctrl.display.settings = {
-            style: 'ul',
-            limit: ctrl.parent.getDefaultLimit(),
-            sort: ctrl.parent.getDefaultSort(),
-            pager: {}
           };
         }
         ctrl.parent.initColumns({});
