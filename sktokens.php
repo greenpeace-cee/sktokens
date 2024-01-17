@@ -73,6 +73,8 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
             $renderedValue = \Civi\Sktokens\Utils::getRewrittenToken($rewriteLabel, $rewriteArray[$rowPrimaryKey]);
           }
           if ($renderedValue) {
+            // GROUP_CONCAT gets returned as an array, not a string, which screws up...well, everything.
+            $renderedValue = implode(', ', (array) $renderedValue);
             $row->format('text/html');
             $row->tokens($category, $token, $renderedValue);
           }
