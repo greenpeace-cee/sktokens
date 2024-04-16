@@ -22,6 +22,11 @@
           };
         }
         ctrl.parent.initColumns({});
+        ctrl.display.settings.columns.forEach(function(column) {
+          if (!column.label) {
+            column.label = ctrl.parent.getColLabel(column);
+          }
+        });
       };
 
       this.$onRewrite = function(col) {
