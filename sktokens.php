@@ -89,8 +89,13 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
  */
 function sktokens_civicrm_pre($op, $objectName, $objectId, &$objectRef) {
   if ($objectName === 'SavedSearch' && in_array($op, ['create', 'edit'])) {
-    if (!in_array('id', $objectRef["api_params"]["select"])) {
-      $objectRef["api_params"]["select"][] = 'id';
+    // Sometimes api_params is not set. Eg. when using in-place edit to update description via searchkit listings.
+    // Have not investigated further but added the below isset/return to stop PHP Fatal error on undefined array key.
+    if (!isset($objectRef['api_params'])) {
+      return;
+    }
+    if (!in_array('id', $objectRef['api_params']['select'])) {
+      $objectRef['api_params']['select'][] = 'id';
     }
   }
 }
