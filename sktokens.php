@@ -12,10 +12,11 @@ function sktokens_civicrm_container(ContainerBuilder $container) {
 }
 
 function sktokens_register_tokens(\Civi\Token\Event\TokenRegisterEvent $e) {
-  $searchDisplays = (array) \Civi\Api4\SearchDisplay::get()
+  $searchDisplays = \Civi\Api4\SearchDisplay::get(FALSE)
     ->addSelect('label', 'settings', 'saved_search_id.name')
     ->addWhere('type', '=', 'tokens')
-    ->execute();
+    ->execute()
+    ->getArrayCopy();
   foreach ($searchDisplays as $searchDisplay) {
     $fields = $searchDisplay['settings']['columns'];
     $category = \CRM_Utils_String::titleToVar($searchDisplay['label']);
@@ -30,10 +31,11 @@ function sktokens_register_tokens(\Civi\Token\Event\TokenRegisterEvent $e) {
 function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
   // Get the list of token SearchDisplays.
   $tokens = $e->getTokenProcessor()->getMessageTokens();
-  $searchDisplays = (array) \Civi\Api4\SearchDisplay::get(FALSE)
+  $searchDisplays = \Civi\Api4\SearchDisplay::get(FALSE)
     ->addSelect('name', 'label', 'saved_search_id.name', 'saved_search_id.api_entity', 'settings')
     ->addWhere('type', '=', 'tokens')
-    ->execute();
+    ->execute()
+    ->getArrayCopy();
   foreach ($searchDisplays as $searchDisplay) {
     $rewriteMap = \Civi\Sktokens\Utils::getRewriteMap($searchDisplay['name'], $searchDisplay['settings']['columns']);
     $category = \CRM_Utils_String::titleToVar($searchDisplay['label']);
@@ -55,13 +57,14 @@ function sktokens_evaluate_tokens(\Civi\Token\Event\TokenValueEvent $e) {
         ->setSavedSearch($searchDisplay['saved_search_id.name'])
         ->setFilters(['id' => $primaryKeys])
         ->setDisplay($searchDisplay['name'])
-        ->execute();
-      if (!count($searchResult)) {
+        ->execute()
+        ->getArrayCopy();
+      if (empty($searchResult)) {
         return;
       }
-      $dataArrayUnindexed = array_column((array) $searchResult, 'data');
+      $dataArrayUnindexed = array_column($searchResult, 'data');
       $dataArray = array_combine(array_column($dataArrayUnindexed, 'id'), $dataArrayUnindexed);
-      $rewriteArrayUnindexed = array_column((array) $searchResult, 'columns');
+      $rewriteArrayUnindexed = array_column($searchResult, 'columns');
       $rewriteArray = array_combine(array_column($dataArrayUnindexed, 'id'), $rewriteArrayUnindexed);
       foreach ($e->getRows() as $key => $row) {
         $rowPrimaryKey = $e->getTokenProcessor()->getContextValues($primaryKeyType)[$key];
@@ -126,31 +129,3 @@ function sktokens_civicrm_install(): void {
 function sktokens_civicrm_enable(): void {
   _sktokens_civix_civicrm_enable();
 }
-
-// --- Functions below this ship commented out. Uncomment as required. ---
-
-/**
- * Implements hook_civicrm_preProcess().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_preProcess
- */
-//function sktokens_civicrm_preProcess($formName, &$form): void {
-//
-//}
-
-/**
- * Implements hook_civicrm_navigationMenu().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_navigationMenu
- */
-//function sktokens_civicrm_navigationMenu(&$menu): void {
-//  _sktokens_civix_insert_navigation_menu($menu, 'Mailings', [
-//    'label' => E::ts('New subliminal message'),
-//    'name' => 'mailing_subliminal_message',
-//    'url' => 'civicrm/mailing/subliminal',
-//    'permission' => 'access CiviMail',
-//    'operator' => 'OR',
-//    'separator' => 0,
-//  ]);
-//  _sktokens_civix_navigationMenu($menu);
-//}
