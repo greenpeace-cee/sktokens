@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version 2.1.2
+
+* [!7](https://lab.civicrm.org/extensions/sktokens/-/merge_requests/7) Fix PHP fatal error
+* [!8](https://lab.civicrm.org/extensions/sktokens/-/merge_requests/8) Fix permissions on register tokens
+
 ## Version 2.1.1
 
 * Support tokens based on fields that are grouped with 'list' functions.
